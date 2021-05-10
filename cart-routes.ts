@@ -26,6 +26,12 @@ routes.get("/items", (req, res) => {
   if (maxPrice) {
     results = results.filter((item) => item.price <= maxPrice);
   }
+  if (product) {
+    product = product.toLowerCase();
+    results = results.filter((item) =>
+      item.product.toLowerCase().startsWith(product)
+    );
+  }
   res.json(items);
 });
 
@@ -42,13 +48,13 @@ routes.get("/items/:id", (req, res) => {
 });
 
 routes.post("/items", (req, res) => {
-    let item: Cart = req.body;
-    item.id = nextId;
-    nextId++;
-    items.push(item);
-    res.status(201);
-    res.json(item);
-  });
+  let item: Cart = req.body;
+  item.id = nextId;
+  nextId++;
+  items.push(item);
+  res.status(201);
+  res.json(item);
+});
 
 routes.put("/items/:id", (req, res) => {
   const id: number = parseInt(req.params.id);
@@ -65,13 +71,13 @@ routes.put("/items/:id", (req, res) => {
 });
 
 routes.delete("/items/:id", (req, res) => {
-    const id: number = parseInt(req.params.id);
-    const index: number = items.findIndex((item) => item.id === id);
-    if (index !== -1) {
-      items.splice(index, 1);
-    }
-    res.status(204);
-    res.send();
-  });
+  const id: number = parseInt(req.params.id);
+  const index: number = items.findIndex((item) => item.id === id);
+  if (index !== -1) {
+    items.splice(index, 1);
+  }
+  res.status(204);
+  res.send();
+});
 
 export default routes;
